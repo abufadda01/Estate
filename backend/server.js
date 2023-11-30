@@ -17,6 +17,24 @@ app.use("/api/auth" , authRoutes)
 
 
 
+// custom error handler middlewre
+app.use((err , req , res , next) => {
+
+    let errorObject = {
+        msg : err.message || "Somthing went wrong !" ,
+        statusCode : err.status || 500
+    }
+
+    return res.status(errorObject.statusCode).json({
+        success : false ,
+        statusCode : errorObject.statusCode ,
+        msg : errorObject.msg
+    })
+
+})
+
+
+
 
 const PORT = process.env.PORT || 5000
 

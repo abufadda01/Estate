@@ -1,11 +1,11 @@
 const {Router} = require("express")
-const { signUp } = require("../controllers/userControllers")
+const { signUp } = require("../controllers/authControllers")
 
 const router = Router()
 
 
 
-router.post("/signup" , signUp)
+router.post("/signup" , signUp) 
 
 
 
