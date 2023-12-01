@@ -7,7 +7,7 @@ const SignUp = () => {
 
   const navigate = useNavigate()
 
-  const [formData , setFormData] = useState({
+  const [formData , setFormData] = useState({ 
     username : "" ,
     email : "" ,
     password : ""

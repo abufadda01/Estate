@@ -1,6 +1,7 @@
 const express = require("express") 
 const connectDB = require("./db/connectDB")
 const cors = require("cors")
+const cookieParser = require("cookie-parser")
 require("dotenv").config()
 
 
@@ -9,6 +10,7 @@ const app = express()
 
 app.use(express.json())
 app.use(cors())
+app.use(cookieParser())
 
 
 
@@ -25,7 +27,7 @@ app.use((err , req , res , next) => {
         statusCode : err.status || 500
     }
 
-    // check if there is an error code already then check its value
+    // check if there is an error code already then check its value , 11000 means there is a duplicate record
     if(err.code && err.code === 11000){
         errorObject.statusCode = 500
         errorObject.msg = "user already exist"

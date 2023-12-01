@@ -1,4 +1,5 @@
 const Joi = require("joi")
+const bcrypt = require("bcrypt")
 const User = require("../models/userModel")
 const createError = require("../utils/createError")
 
@@ -40,4 +41,49 @@ const signUp = async (req , res , next) => {
 
 
 
-module.exports = {signUp}
+
+const signIn = async (req , res , next) => {
+
+    const signInSchema = Joi.object({
+        email : Joi.string().email().required(),
+        password : Joi.string().required().min(8)
+    })
+
+    const {value , error} = signInSchema.validate(req.body)
+    
+    if(error){
+        return next(createError(500 , "Invalid Credentials"))
+    }
+
+    const {email , password} = value
+
+
+    try {
+
+        const user = await User.findOne({email}).select("+password")
+
+        if(!user){
+            return next(createError(404 , "User not found"))
+        }
+
+        const isPasswordMatched = await bcrypt.compare(password , user.password)
+
+        if(!isPasswordMatched){
+            return next(createError(401 , "Password not match")) 
+        }
+
+        user.password = undefined
+
+        const token = user.createJWT()
+
+        res.cookie("access-token" , token , {httpOnly : true , maxAge : 24 * 60 * 60 * 1000}).status(200).json({token})
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+
+
+module.exports = {signUp , signIn}
