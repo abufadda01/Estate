@@ -1,5 +1,6 @@
 const Joi = require("joi")
 const User = require("../models/userModel")
+const createError = require("../utils/createError")
 
 
 const signUp = async (req , res , next) => {
@@ -13,7 +14,7 @@ const signUp = async (req , res , next) => {
     const {value , error} = signUpSchema.validate(req.body , {abortEarly : false})
 
     if(error){
-        return res.status(400).json({message : "Invalid Credentials"})
+        return next(createError(400 , "Invalid Credentials"))
     }
 
     const {username , email , password} = value

@@ -25,6 +25,13 @@ app.use((err , req , res , next) => {
         statusCode : err.status || 500
     }
 
+    // check if there is an error code already then check its value
+    if(err.code && err.code === 11000){
+        errorObject.statusCode = 500
+        errorObject.msg = "user already exist"
+    }
+
+
     return res.status(errorObject.statusCode).json({
         success : false ,
         statusCode : errorObject.statusCode ,
