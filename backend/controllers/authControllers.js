@@ -51,32 +51,33 @@ const signIn = async (req , res , next) => {
 
     const {value , error} = signInSchema.validate(req.body)
     
-    if(error){
-        return next(createError(500 , "Invalid Credentials"))
-    }
-
+    
     const {email , password} = value
-
-
+    
+    
     try {
-
+        
         const user = await User.findOne({email}).select("+password")
-
+        
         if(!user){
             return next(createError(404 , "User not found"))
+        }
+
+        if(error){
+            return next(createError(500 , "Invalid Credentials"))
         }
 
         const isPasswordMatched = await bcrypt.compare(password , user.password)
 
         if(!isPasswordMatched){
-            return next(createError(401 , "Password not match")) 
+            return next(createError(401 , "Wrong Password")) 
         }
 
         user.password = undefined
 
         const token = user.createJWT()
 
-        res.cookie("access-token" , token , {httpOnly : true , maxAge : 24 * 60 * 60 * 1000}).status(200).json({token})
+        res.cookie("access-token" , token , {httpOnly : true}).status(200).json({user})
 
     } catch (error) {
         next(error)

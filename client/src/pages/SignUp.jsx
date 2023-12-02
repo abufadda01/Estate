@@ -7,7 +7,7 @@ const SignUp = () => {
 
   const navigate = useNavigate()
 
-  const [formData , setFormData] = useState({ 
+  const [formData , setFormData] = useState({
     username : "" ,
     email : "" ,
     password : ""
@@ -67,7 +67,7 @@ const SignUp = () => {
 
       <div className='flex gap-2 mt-3'>
         <p>Have an account ?</p>
-        <Link className='text-blue-700' to="/sign-in">Sign in</Link>
+        <Link className='text-blue-700' to="/sign-in">Login</Link>
       </div>
 
       {errorMsg && <p className='text-red-500 text-lg mt-5'>{errorMsg}</p>}
