@@ -1,20 +1,27 @@
 import React , {useState} from 'react'
 import {Link , useNavigate} from "react-router-dom"
 import axios from "axios"
+import {useDispatch , useSelector} from "react-redux"
+import { signInStart , signInSuccess , signInFailure } from '../redux/user/userSlice'
 
 
 const SignIn = () => {
 
   const navigate = useNavigate()
 
+  const dispatch = useDispatch()
+
+  const {loading , error} = useSelector((state) => state.user) // state.slice_name_in_the_store and you will get the initialState object of this slice 
+
   const [formData , setFormData] = useState({
     email : "" ,
     password : ""
   })
 
-  const [errorMsg , setErrorMsg] = useState(null)
+
   const [successMsg , setSuccessMsg] = useState(null)
-  const [loading , setLoading] = useState(false)
+  // const [errorMsg , setErrorMsg] = useState(null)
+  // const [loading , setLoading] = useState(false)
 
 
   const handleChange = (e) => {
@@ -25,13 +32,13 @@ const SignIn = () => {
   const onSubmit = async (e) => {
 
     e.preventDefault()
-    setLoading(true)
+    dispatch(signInStart())
 
     try {
 
       const response = await axios.post("/api/auth/signin" , formData)
-      setLoading(false)
-      setSuccessMsg(`Welcome back`)
+      dispatch(signInSuccess(response.data))
+      // setLoading(false)
 
       setTimeout(() => {
         navigate("/")
@@ -39,8 +46,9 @@ const SignIn = () => {
 
     } catch (error) {
       if(!error.response.data.success){
-        setErrorMsg(error.response.data.msg)
-        setLoading(false)
+        dispatch(signInFailure(error.response.data.msg))
+        // setErrorMsg(error.response.data.msg)
+        // setLoading(false)
         setTimeout(() => {
           window.location.reload()
         } , 2000)
@@ -71,8 +79,7 @@ const SignIn = () => {
         <Link className='text-blue-700' to="/sign-up">Sign up</Link>
       </div>
 
-      {errorMsg && <p className='text-red-500 text-lg mt-5'>{errorMsg}</p>}
-      {successMsg && <p className='text-green-500 text-lg mt-5'>{successMsg}</p>}
+      {error && <p className='text-red-500 text-lg mt-5'>{error}</p>}
 
     </div>
   )

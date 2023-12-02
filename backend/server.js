@@ -37,7 +37,7 @@ app.use((err , req , res , next) => {
     return res.status(errorObject.statusCode).json({
         success : false ,
         statusCode : errorObject.statusCode ,
-        msg : errorObject.msg
+        msg : errorObject.msg 
     })
 
 })
