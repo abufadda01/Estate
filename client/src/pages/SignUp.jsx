@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import {Link , useNavigate} from "react-router-dom"
 import axios from "axios"
+import Oauth from '../components/Oauth'
 
 
 const SignUp = () => {
@@ -62,6 +63,8 @@ const SignUp = () => {
         <button disabled={loading} className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-90 disabled:opacity-80'>
           {loading ? "Loading..." : "Sign up"}
         </button>
+
+        <Oauth/>
 
       </form>
 
