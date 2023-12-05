@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema({
         min : 8,
         select : false
         // if we want to access it again in any controller .select("+password")
+    },
+    avatar : {
+        type : String,
+        default : "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.istockphoto.com%2Fillustrations%2Fempty-profile-picture&psig=AOvVaw0_V51HX6VHC7TKEMbytEMB&ust=1701886526515000&source=images&cd=vfe&ved=0CBIQjRxqFwoTCJDg_8Pz-IIDFQAAAAAdAAAAABAE"
     }
 } , {timestamps : true})
 

@@ -87,4 +87,52 @@ const signIn = async (req , res , next) => {
 
 
 
-module.exports = {signUp , signIn}
+
+const google = async (req , res , next) => {
+    
+    let {email , displayName : username , photoURL : photo} = req.body
+    
+    try {
+        
+        let user = await User.findOne({email})
+
+        // if user already register with this email , continue and create a token for this user
+        if(user){
+            
+            const token = user.createJWT()
+            user.password = undefined
+            res.cookie("access_token" , token , {httpOnly : true}).status(200).json(user)
+        
+            // if user doesn't register with account already  , create a new user document and create a random user password , and the user will change it after loging in
+        }else{
+        
+            const generateRandomPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8)
+            const hashedPassword = await bcrypt.hash(generateRandomPassword , 10)
+
+            username = username.split(" ").join("").toLowerCase()
+
+            let user = new User({
+                username,
+                email,
+                password : hashedPassword,
+                avatar : photo
+            })
+
+            await user.save()
+
+            user.password = undefined
+
+            const token = user.createJWT()
+
+            res.cookie("access_token" , token , {httpOnly : true}).status(200).json(user)
+            
+        }
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+
+module.exports = {signUp , signIn , google}
