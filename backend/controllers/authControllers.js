@@ -77,7 +77,7 @@ const signIn = async (req , res , next) => {
 
         const token = user.createJWT()
 
-        res.cookie("access-token" , token , {httpOnly : true}).status(200).json({user})
+        res.cookie("access_token" , token , {httpOnly : true}).status(200).json({user})
 
     } catch (error) {
         next(error)
@@ -101,7 +101,7 @@ const google = async (req , res , next) => {
             
             const token = user.createJWT()
             user.password = undefined
-            res.cookie("access_token" , token , {httpOnly : true}).status(200).json(user)
+            res.cookie("access_token" , token , {httpOnly : true}).status(200).json(user , token)
         
             // if user doesn't register with account already  , create a new user document and create a random user password , and the user will change it after loging in
         }else{
