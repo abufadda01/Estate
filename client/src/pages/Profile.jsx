@@ -2,7 +2,7 @@ import React , {useEffect, useRef, useState} from 'react'
 import { useSelector , useDispatch } from 'react-redux'
 import {getDownloadURL, getStorage , ref , uploadBytesResumable} from "firebase/storage" 
 import { app } from '../firebase'
-import { updateUserStart , updateUserSuccess , updateUserFailure } from '../redux/user/userSlice'
+import { updateUserStart , updateUserSuccess , updateUserFailure , deleteUserProfileStart , deleteUserProfileSuccess , deleteUserProfileFailure , removeTokenInLocalStorage } from '../redux/user/userSlice'
 import axios from "axios"
 
 
@@ -38,7 +38,7 @@ const Profile = () => {
 
 
   const handleSubmit = async (e) => {
-    
+
     e.preventDefault()
     
     dispatch(updateUserStart())
@@ -56,6 +56,31 @@ const Profile = () => {
     } catch (error) {
       if(!error.response?.data.success){
         dispatch(updateUserFailure(error.response?.data.msg))
+      }
+    }
+  }
+
+
+
+  const deleteUser = async (e) => {
+
+    e.preventDefault()
+    dispatch(deleteUserProfileStart())
+
+    try {
+
+      await axios.delete(`/api/user/delete/${currentUser._id}` , {
+        headers : {
+          "access_token" : token
+        }
+      })
+      
+      dispatch(deleteUserProfileSuccess())
+      dispatch(removeTokenInLocalStorage())
+
+    } catch (error) {
+      if(!error.response?.data.success){
+        dispatch(deleteUserProfileFailure(error.response?.data.msg))
       }
     }
   }
@@ -130,7 +155,7 @@ const Profile = () => {
 
       <div className='flex justify-between mt-5'>
 
-        <span className='text-red-700 font-semibold cursor-pointer'>Delete Account</span>
+        <span onClick={deleteUser} className='text-red-700 font-semibold cursor-pointer'>Delete Account</span>
         <span className='text-red-700 font-semibold cursor-pointer'>Sign Out</span>
 
       </div>
