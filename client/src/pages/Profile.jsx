@@ -2,7 +2,7 @@ import React , {useEffect, useRef, useState} from 'react'
 import { useSelector , useDispatch } from 'react-redux'
 import {getDownloadURL, getStorage , ref , uploadBytesResumable} from "firebase/storage" 
 import { app } from '../firebase'
-import { updateUserStart , updateUserSuccess , updateUserFailure , deleteUserProfileStart , deleteUserProfileSuccess , deleteUserProfileFailure , removeTokenInLocalStorage } from '../redux/user/userSlice'
+import { updateUserStart , updateUserSuccess , updateUserFailure , deleteUserProfileStart , deleteUserProfileSuccess , deleteUserProfileFailure , removeTokenInLocalStorage , signOutUser } from '../redux/user/userSlice'
 import axios from "axios"
 
 
@@ -84,6 +84,13 @@ const Profile = () => {
       }
     }
   }
+
+
+
+  const signOut = () => {
+    dispatch(removeTokenInLocalStorage())
+    dispatch(signOutUser())
+  }
   
 
 
@@ -156,7 +163,7 @@ const Profile = () => {
       <div className='flex justify-between mt-5'>
 
         <span onClick={deleteUser} className='text-red-700 font-semibold cursor-pointer'>Delete Account</span>
-        <span className='text-red-700 font-semibold cursor-pointer'>Sign Out</span>
+        <span onClick={signOut} className='text-red-700 font-semibold cursor-pointer'>Sign Out</span>
 
       </div>
 
