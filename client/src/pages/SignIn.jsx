@@ -2,7 +2,7 @@ import React , {useState} from 'react'
 import {Link , useNavigate} from "react-router-dom"
 import axios from "axios"
 import {useDispatch , useSelector} from "react-redux"
-import { signInStart , signInSuccess , signInFailure } from '../redux/user/userSlice'
+import { signInStart , signInSuccess , signInFailure , saveTokenInLocalStorage} from '../redux/user/userSlice'
 import Oauth from '../components/Oauth'
 
 
@@ -39,6 +39,7 @@ const SignIn = () => {
 
       const response = await axios.post("/api/auth/signin" , formData)
       dispatch(signInSuccess(response.data))
+      dispatch(saveTokenInLocalStorage(response.data))
       // setLoading(false)
 
       setTimeout(() => {

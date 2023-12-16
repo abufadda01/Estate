@@ -77,7 +77,7 @@ const signIn = async (req , res , next) => {
 
         const token = user.createJWT()
 
-        res.cookie("access_token" , token , {httpOnly : true}).status(200).json({user})
+        res.status(200).json({user , token})
 
     } catch (error) {
         next(error)

@@ -1,12 +1,15 @@
 import React , {useEffect, useRef, useState} from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector , useDispatch } from 'react-redux'
 import {getDownloadURL, getStorage , ref , uploadBytesResumable} from "firebase/storage" 
 import { app } from '../firebase'
+import { updateUserStart , updateUserSuccess , updateUserFailure } from '../redux/user/userSlice'
+import axios from "axios"
 
 
 const Profile = () => {
 
-  const {currentUser} = useSelector((state) => state.user)
+  const {currentUser , token , loading , error} = useSelector((state) => state.user)
+  const dispatch = useDispatch()
 
   // create a reference value
   const fileRef = useRef(null)
@@ -15,9 +18,9 @@ const Profile = () => {
   const [filePerc , setFilePerc] = useState(0)
   const [fileUploadError , setFileUploadError] = useState(false)
 
-  const [formData , setFormData] = useState({
+  const [formData , setFormData] = useState({})
 
-  })
+  console.log(token)
 
   
   useEffect(() => {
@@ -27,6 +30,35 @@ const Profile = () => {
     }
 
   } , [file])
+
+
+  const handleChange = e => {
+    setFormData({...formData , [e.target.name] : e.target.value})
+  }
+
+
+  const handleSubmit = async (e) => {
+    
+    e.preventDefault()
+    
+    dispatch(updateUserStart())
+
+    try {
+
+      const response = await axios.post(`/api/user/update/${currentUser._id}` , formData , {
+        headers : {
+          "access_token" : token
+        }
+      })
+
+      dispatch(updateUserSuccess(response.data))
+
+    } catch (error) {
+      if(!error.response?.data.success){
+        dispatch(updateUserFailure(error.response?.data.msg))
+      }
+    }
+  }
   
 
 
@@ -62,12 +94,12 @@ const Profile = () => {
 
       <h1 className='text-center text-3xl mt-8 font-bold'>Profile</h1>
 
-      <form className='flex flex-col mt-5 gap-4'>
+      <form onSubmit={handleSubmit} className='flex flex-col mt-5 gap-4'>
 
-        {/* // assign the ref value to the input field (we catch the input field inside this ref) */}
+        {/* // assign the ref value to the input onChange={handleChange} field (we catch the input onChange={handleChange} field inside this ref) */}
         <input onChange={(e) => setFile(e.target.files[0])} type="file" ref={fileRef} hidden accept='image/*' />
 
-        {/* // every time we click on the image at will act as we click on the input field , because the ref.current object contain the input field */}
+        {/* // every time we click on the image at will act as we click on the input onChange={handleChange} field , because the ref.current object contain the input onChange={handleChange} field */}
         <img onClick={() => fileRef.current.click()} src={formData.avatar || currentUser.avatar} className='rounded-lg h-28 w-24 object-cover cursor-pointer self-center' alt="" />
 
         <p className='text-sm self-center'>
@@ -82,17 +114,17 @@ const Profile = () => {
             :
             filePerc === 100
             ?
-              <span className='text-green-600'>Successfully uploaded</span>
+              <span className='text-green-600'>Image Successfully uploaded</span>
             :
               ""
           }
         </p>
 
-        <input type="text" className='rounded-md border p-3' name='username' placeholder="username" />
-        <input type="email" className='rounded-md border p-3' name='email' placeholder="name@example.com" />
-        <input type="password" className='rounded-md border p-3' name='password' placeholder="********" />
+        <input onChange={handleChange} type="text" defaultValue={currentUser.username} className='rounded-md border p-3' name='username' placeholder="username" />
+        <input onChange={handleChange} type="email" defaultValue={currentUser.email} className='rounded-md border p-3' name='email' placeholder="name@example.com" />
+        <input onChange={handleChange} type="password" className='rounded-md border p-3' name='password' placeholder="********" />
 
-        <button className='bg-slate-700 rounded-lg p-3 text-white cursor-pointer hover:opacity-90 uppercase disabled:opacity-75'>update profile</button>
+        <button disabled={loading} className='bg-slate-700 rounded-lg p-3 text-white cursor-pointer hover:opacity-90 uppercase disabled:opacity-75'>{loading ? "Loading..." : "update profile"}</button>
 
       </form>
 
@@ -103,6 +135,7 @@ const Profile = () => {
 
       </div>
 
+      {error && <p className='text-red-600 font-semibold'>{error}</p>}
 
     </div>
   )
