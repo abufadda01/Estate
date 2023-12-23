@@ -132,7 +132,7 @@ const Profile = () => {
         <input onChange={(e) => setFile(e.target.files[0])} type="file" ref={fileRef} hidden accept='image/*' />
 
         {/* // every time we click on the image at will act as we click on the input onChange={handleChange} field , because the ref.current object contain the input onChange={handleChange} field */}
-        <img onClick={() => fileRef.current.click()} src={formData.avatar || currentUser.avatar} className='rounded-lg h-28 w-24 object-cover cursor-pointer self-center' alt="" />
+        <img onClick={() => fileRef.current.click()} src={formData.avatar || currentUser.avatar} className='rounded-lg w-24 object-cover cursor-pointer self-center h-auto' alt="" />
 
         <p className='text-sm self-center'>
           {
@@ -156,7 +156,7 @@ const Profile = () => {
         <input onChange={handleChange} type="email" defaultValue={currentUser.email} className='rounded-md border p-3' name='email' placeholder="name@example.com" />
         <input onChange={handleChange} type="password" className='rounded-md border p-3' name='password' placeholder="********" />
 
-        <button disabled={loading} className='bg-slate-700 rounded-lg p-3 text-white cursor-pointer hover:opacity-90 uppercase disabled:opacity-75'>{loading ? "Loading..." : "update profile"}</button>
+        <button disabled={loading} className='bg-slate-700 rounded-lg p-3 text-white cursor-pointer hover:opacity-90 capitalize disabled:opacity-75'>{loading ? "Loading..." : "update profile"}</button>
 
       </form>
 
