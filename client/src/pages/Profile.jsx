@@ -4,6 +4,7 @@ import {getDownloadURL, getStorage , ref , uploadBytesResumable} from "firebase/
 import { app } from '../firebase'
 import { updateUserStart , updateUserSuccess , updateUserFailure , deleteUserProfileStart , deleteUserProfileSuccess , deleteUserProfileFailure , removeTokenInLocalStorage , signOutUser } from '../redux/user/userSlice'
 import axios from "axios"
+import {Link} from "react-router-dom"
 
 
 const Profile = () => {
@@ -157,6 +158,8 @@ const Profile = () => {
         <input onChange={handleChange} type="password" className='rounded-md border p-3' name='password' placeholder="********" />
 
         <button disabled={loading} className='bg-slate-700 rounded-lg p-3 text-white cursor-pointer hover:opacity-90 capitalize disabled:opacity-75'>{loading ? "Loading..." : "update profile"}</button>
+        
+        <Link to="/create-estate" className='bg-green-600 text-white text-center p-3 rounded-lg cursor-pointer capitalize hover:opacity-90 '>Create Estate</Link>
 
       </form>
 
