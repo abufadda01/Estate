@@ -269,7 +269,7 @@ const CreateEstate = () => {
                 
                 {error && <p className='text-red-700 text-sm font-semibold'>{error}</p>}
             
-                <p className='text-red-600 font-semibold'>{imageUploadError && imageUploadError}</p>
+                <p className='text-red-700 text-sm font-semibold'>{imageUploadError && imageUploadError}</p>
             
                 {formData.imageUrls && formData.imageUrls.length > 0 && formData.imageUrls.map((image , index) => {
                     return (

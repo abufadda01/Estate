@@ -1,6 +1,7 @@
 const createError = require("../utils/createError")
 const bcrypt = require("bcrypt")
 const User = require("../models/userModel")
+const Estate = require("../models/estateModel")
 
 
 const updateUserProfile = async (req , res , next) => {
@@ -52,5 +53,21 @@ const deleteUserProfile = async (req , res , next) => {
 
 
 
+const getUserEstates = async (req , res , next) => {
+    
+    if(req.userId !== req.params.userId) return next(createError(401 , "you can only view your estates"))
 
-module.exports = {updateUserProfile , deleteUserProfile}
+    try {
+        const estates = await Estate.find({user : req.params.userId})
+        
+        res.status(200).json(estates)
+    
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+
+
+module.exports = {updateUserProfile , deleteUserProfile , getUserEstates}
