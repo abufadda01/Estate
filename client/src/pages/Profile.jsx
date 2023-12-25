@@ -10,18 +10,21 @@ import {Link} from "react-router-dom"
 const Profile = () => {
 
   const {currentUser , token , loading , error} = useSelector((state) => state.user)
+
   const dispatch = useDispatch()
 
   // create a reference value
   const fileRef = useRef(null)
 
-  const [file , setFile] = useState(undefined)
+  const [file , setFile] = useState(undefined) 
   const [filePerc , setFilePerc] = useState(0)
   const [fileUploadError , setFileUploadError] = useState(false)
 
+  const [showEstatesError , setShowEstatesError] = useState(false)
+  const [userEstates , setUserEstates] = useState([])
+
   const [formData , setFormData] = useState({})
 
-  console.log(token)
 
   
   useEffect(() => {
@@ -33,9 +36,11 @@ const Profile = () => {
   } , [file])
 
 
+
   const handleChange = e => {
     setFormData({...formData , [e.target.name] : e.target.value})
   }
+
 
 
   const handleSubmit = async (e) => {
@@ -119,7 +124,26 @@ const Profile = () => {
     }
     )
   }
+
+
+
+  const handleShowEstates = async () => {
+    
+    try {
+      const response = await axios.get(`/api/user/getUserEstates/${currentUser._id}` , {
+        headers : {
+          "access_token"  : token
+        }
+      })
+      
+      setUserEstates(response.data)
+    
+    } catch (error) {
+      setShowEstatesError(true)
+    }
+  }
   
+
 
 
   return (
@@ -171,6 +195,40 @@ const Profile = () => {
       </div>
 
       {error && <p className='text-red-600 font-semibold'>{error}</p>}
+
+      <button onClick={handleShowEstates} className='text-green-600 w-full font-semibold capitalize mt-2 mb-4'>show estates</button>
+      
+      {showEstatesError && <p className='text-red-600 font-semibold'>Failed to show user estates</p>}
+
+
+      {userEstates && userEstates.length > 1 &&       
+        <div className='flex flex-col gap-2 mt-3'>
+          
+          <h1 className='text-center font-semibold text-slate-700 capitalize text-2xl mt-3'>your estates</h1>
+          
+          {userEstates.map((estate) => {
+            return(
+              <div key={estate._id} className='flex justify-between items-center gap-5 p-3 border-2 border-slate-200 shadow-md hover:shadow-lg cursor-pointer rounded-lg mt-5 transition-all ease-in duration-150'>
+               
+                <Link to={`/estate/${estate._id}`}>
+                  <img src={estate.imageUrls[0]} alt="estate-image" className='w-24 h-auto object-cover rounded-lg' />
+                </Link>
+               
+                <Link className='text-slate-700 font-bold capitalize flex-1 truncate hover:underline' to={`/estate/${estate._id}`}>
+                  <p>{estate.name}</p>
+                </Link>
+    
+                <div className='flex items-center flex-col gap-2'>
+                  <button className='text-red-600 font-semibold capitalize'>delete</button>
+                  <button className='text-green-600 font-semibold capitalize'>edit</button>
+                </div>
+              
+              </div>
+            )
+          })}
+
+        </div>
+      }
 
     </div>
   )

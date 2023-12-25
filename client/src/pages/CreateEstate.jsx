@@ -25,7 +25,7 @@ const CreateEstate = () => {
         furnished : false ,
         parking : false ,
         offer : false ,
-        typeOfEstate : "sale",
+        typeOfEstate : "rent",
         imageUrls : []
     })
 

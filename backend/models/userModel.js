@@ -47,6 +47,7 @@ userSchema.methods.createJWT = function(){
 }
 
 
+
 const User = mongoose.model("users" , userSchema)
 
 
