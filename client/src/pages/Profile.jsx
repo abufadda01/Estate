@@ -145,6 +145,23 @@ const Profile = () => {
   
 
 
+  const handleEstateDelete = async (estateId) => {
+    
+    try {
+      await axios.delete(`/api/estate/deleteEstate/${estateId}` , {
+        headers : {
+          "access_token" : token
+        }
+      })
+
+      setUserEstates(prev => prev.filter((estate) => estate._id !== estateId))
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
 
   return (
     <div className='p-3 max-w-lg mx-auto'>
@@ -201,7 +218,7 @@ const Profile = () => {
       {showEstatesError && <p className='text-red-600 font-semibold'>Failed to show user estates</p>}
 
 
-      {userEstates && userEstates.length > 1 &&       
+      {userEstates && userEstates.length > 0 &&       
         <div className='flex flex-col gap-2 mt-3'>
           
           <h1 className='text-center font-semibold text-slate-700 capitalize text-2xl mt-3'>your estates</h1>
@@ -211,7 +228,7 @@ const Profile = () => {
               <div key={estate._id} className='flex justify-between items-center gap-5 p-3 border-2 border-slate-200 shadow-md hover:shadow-lg cursor-pointer rounded-lg mt-5 transition-all ease-in duration-150'>
                
                 <Link to={`/estate/${estate._id}`}>
-                  <img src={estate.imageUrls[0]} alt="estate-image" className='w-24 h-auto object-cover rounded-lg' />
+                  <img src={estate?.imageUrls && estate.imageUrls[0]} alt="estate-image" className='w-24 h-auto object-cover rounded-lg' />
                 </Link>
                
                 <Link className='text-slate-700 font-bold capitalize flex-1 truncate hover:underline' to={`/estate/${estate._id}`}>
@@ -219,7 +236,7 @@ const Profile = () => {
                 </Link>
     
                 <div className='flex items-center flex-col gap-2'>
-                  <button className='text-red-600 font-semibold capitalize'>delete</button>
+                  <button onClick={() => handleEstateDelete(estate._id)} className='text-red-600 font-semibold capitalize'>delete</button>
                   <button className='text-green-600 font-semibold capitalize'>edit</button>
                 </div>
               
