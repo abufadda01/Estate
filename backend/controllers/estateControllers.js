@@ -30,8 +30,6 @@ const deleteEstate = async (req , res , next) => {
 
         await Estate.findByIdAndDelete(req.params.estateId)
 
-        console.log(typeof estate.user)
-
         res.status(200).json({msg : "estate deleted successfully"})
 
     } catch (error) {
@@ -41,4 +39,30 @@ const deleteEstate = async (req , res , next) => {
 
 
 
-module.exports = {createEstate , deleteEstate}
+
+const updateEstate = async (req , res , next) => {
+    try {
+        
+        const estate = await Estate.findById(req.params.estateId)
+
+        if(!estate){
+            return next(createError(404 , "Estate not exist"))
+        }
+
+        if(req.userId !== estate.user){
+            return next(createError(401 , "you can only update your own estates"))
+        }
+
+        const updatedEstate = await Estate.findByIdAndUpdate(req.params.estateId , req.body , {new : true})
+
+        res.status(200).json(updatedEstate)
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+
+
+module.exports = {createEstate , deleteEstate , updateEstate}
