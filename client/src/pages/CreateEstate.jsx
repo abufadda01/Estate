@@ -222,7 +222,7 @@ const CreateEstate = () => {
 
                     <div className='flex items-center gap-2'>
 
-                        <input onChange={handleChange} min={50} max={100000} value={formData.regularPrice} type="number" name='regularPrice' className='p-3 rounded-lg border-gray-300'  required />
+                        <input onChange={handleChange} min={50} max={1000000} value={formData.regularPrice} type="number" name='regularPrice' className='p-3 rounded-lg border-gray-300'  required />
                         
                         <div className='flex flex-col items-start'>
                             <p>Regular Price</p>
