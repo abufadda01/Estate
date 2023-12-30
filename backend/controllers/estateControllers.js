@@ -65,4 +65,20 @@ const updateEstate = async (req , res , next) => {
 
 
 
-module.exports = {createEstate , deleteEstate , updateEstate}
+const getEstate = async (req , res , next) => {
+    try {
+        const estate = await Estate.findById(req.params.estateId)
+
+        if(!estate){
+            return next(createError(404 , "No Estate founded with this id"))
+        }
+
+        res.status(200).json(estate)
+
+    } catch (error) {
+        next(error)
+    }
+} 
+
+
+module.exports = {createEstate , deleteEstate , updateEstate , getEstate}

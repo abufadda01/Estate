@@ -114,7 +114,7 @@ const Profile = () => {
     },
     // if there is an error
     (error) => {
-      setFileUploadError(true)
+      setFileUploadError(true) 
     },
     // if every thing success
     () => {
@@ -236,8 +236,13 @@ const Profile = () => {
                 </Link>
     
                 <div className='flex items-center flex-col gap-2'>
+                  
                   <button onClick={() => handleEstateDelete(estate._id)} className='text-red-600 font-semibold capitalize'>delete</button>
-                  <button className='text-green-600 font-semibold capitalize'>edit</button>
+                  
+                  <Link to={`/update-estate/${estate._id}`}>
+                    <button className='text-green-600 font-semibold capitalize'>edit</button>
+                  </Link>
+
                 </div>
               
               </div>
