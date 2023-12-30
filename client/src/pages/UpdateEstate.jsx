@@ -40,11 +40,7 @@ const UpdateEstate = () => {
                 
                 const estateId = params.estateId
                 
-                const response = await axios.get(`/api/estate/getEstate/${estateId}` , {
-                    headers : {
-                        "access_token" : token
-                    }
-                })
+                const response = await axios.get(`/api/estate/getEstate/${estateId}`)
 
                 setFormData(response.data)
 

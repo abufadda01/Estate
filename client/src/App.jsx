@@ -8,6 +8,7 @@ import Header from "./components/Header"
 import ProtectedRoute from "./components/ProtectedRoute"
 import CreateEstate from "./pages/CreateEstate"
 import UpdateEstate from "./pages/UpdateEstate"
+import Estate from "./pages/Estate"
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="/sign-in" element={<SignIn/>}/> 
           <Route path="/sign-up" element={<SignUp/>}/>
           <Route path="/about" element={<About/>}/>
+          <Route path="/estate/:estateId" element={<Estate/>}/>
             
           <Route path="/profile" element={<ProtectedRoute> <Profile/> </ProtectedRoute>}/>
 
