@@ -15,6 +15,7 @@ import {
   FaShare,
 } from 'react-icons/fa';
 import axios from 'axios';
+import Contact from '../components/Contact';
 
 
 
@@ -34,7 +35,7 @@ export default function Estate() {
   
   const params = useParams();
   
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state) => state.user); 
 
 
   useEffect(() => {
@@ -147,16 +148,15 @@ export default function Estate() {
                 {estate.furnished ? 'Furnished' : 'Unfurnished'}
               </li>
             </ul>
+
             {currentUser && estate.user !== currentUser._id && !contact && (
-              <button
-                onClick={() => setContact(true)}
-                className='bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3'
-              >
-                Contact landlord
-              </button>
+              <button onClick={() => setContact(true)} className='bg-slate-700 text-white p-2 rounded-lg capitalize mt-2 hover:opacity-90'>Contact Landlord</button>
             )}
-            {/* {contact && <Contact listing={listing} />} */}
+
+            {contact && <Contact estate={estate} />}
+          
           </div>
+        
         </div>
       )}
     </main>

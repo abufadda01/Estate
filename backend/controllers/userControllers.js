@@ -70,4 +70,23 @@ const getUserEstates = async (req , res , next) => {
 
 
 
-module.exports = {updateUserProfile , deleteUserProfile , getUserEstates}
+const getUser = async (req , res , next) => {
+    try {
+        const {userId} = req.params
+        
+        const user = await User.findById(userId)
+        
+        if(!user){
+            return next(createError(404 , "User not exist"))
+        }
+
+        res.status(200).json(user)
+
+    } catch (error) {
+        next(error)        
+    }
+}
+
+
+
+module.exports = {updateUserProfile , deleteUserProfile , getUserEstates , getUser}
