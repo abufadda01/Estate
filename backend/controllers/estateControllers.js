@@ -81,4 +81,64 @@ const getEstate = async (req , res , next) => {
 } 
 
 
-module.exports = {createEstate , deleteEstate , updateEstate , getEstate}
+
+
+const getEstates = async (req , res , next) => {
+    try {
+        
+        const limit = req.query.limit || 9
+        const startIndex = req.query.startIndex || 0
+
+        let offer = req.query.offer
+        let furnished = req.query.furnished
+        let parking = req.query.parking
+        let typeOfEstate = req.query.type
+
+        const searchTerm = req.query.searchTerm || ""
+
+        const sort = req.query.sort || "createdAt"
+        const order = req.query.order || "desc"
+
+
+        // if the offer isundefinedor false that means get the both offered and not offerd data in the database both of (true , false)
+        if(offer === undefined || offer === "false"){
+            offer = {$in : [false , true]}
+        }
+
+        if(furnished === undefined || furnished === "false"){
+            furnished = {$in : [false , true]}
+        }
+
+        if(parking === undefined || parking === "false"){
+            parking = {$in : [false , true]}
+        }
+
+        if(typeOfEstate === undefined || typeOfEstate === "all"){
+            typeOfEstate = {$in : ["sale" , "rent"]}
+        }
+
+        const estates = await Estate.find({
+            name : {$regex : searchTerm , $options : "i"},
+            offer ,
+            furnished ,
+            parking ,
+            typeOfEstate
+        })
+        // sort the returned documents by the createdAt in desc way {[createdAt] : desc}
+        .sort({[sort] : order})
+        .limit(limit)
+        .skip(startIndex)
+
+
+        res.status(200).json(estates)
+
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+
+
+module.exports = {createEstate , deleteEstate , updateEstate , getEstate , getEstates}
