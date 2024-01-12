@@ -9,6 +9,7 @@ import ProtectedRoute from "./components/ProtectedRoute"
 import CreateEstate from "./pages/CreateEstate"
 import UpdateEstate from "./pages/UpdateEstate"
 import Estate from "./pages/Estate"
+import Search from "./pages/Search"
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
           <Route path="/sign-up" element={<SignUp/>}/>
           <Route path="/about" element={<About/>}/>
           <Route path="/estate/:estateId" element={<Estate/>}/>
+          <Route path="/search" element={<Search/>}/>
             
           <Route path="/profile" element={<ProtectedRoute> <Profile/> </ProtectedRoute>}/>
 
