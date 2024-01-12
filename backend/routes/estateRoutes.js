@@ -12,7 +12,7 @@ router.delete("/deleteEstate/:estateId" , verifyUser , deleteEstate)
 
 router.post("/updateEstate/:estateId" , verifyUser , updateEstate)
 
-router.get("/getEstate/:estateId" , getEstate , getEstates)
+router.get("/getEstate/:estateId" , getEstate)
 
 router.get("/getEstates" , getEstates)
 

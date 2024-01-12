@@ -69,7 +69,7 @@ const getEstate = async (req , res , next) => {
     try {
         const estate = await Estate.findById(req.params.estateId)
 
-        if(!estate){
+        if(!estate){ 
             return next(createError(404 , "No Estate founded with this id"))
         }
 
@@ -117,6 +117,7 @@ const getEstates = async (req , res , next) => {
             typeOfEstate = {$in : ["sale" , "rent"]}
         }
 
+        
         const estates = await Estate.find({
             name : {$regex : searchTerm , $options : "i"},
             offer ,
