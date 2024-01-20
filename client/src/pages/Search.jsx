@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import {useNavigate} from "react-router-dom"
 import axios from "axios"
+import EstateItem from '../components/EstateItem'
 
 
 const Search = () => {
@@ -65,7 +66,7 @@ const Search = () => {
                 setEstates(response.data)
                 setLoading(false)
 
-            } catch (error) {
+            } catch (error) { 
                 console.log(error)
             }
         }
@@ -205,11 +206,31 @@ const Search = () => {
         </div>
 
 
+
         <div className='p-3'>
 
             <h1 className='text-3xl border-b font-semibold p-3 text-slate-600'>Estates Results</h1>
 
+            <div className='p-7 flex flex-wrap gap-4'>
+
+                {!loading && estates.length === 0 && (
+                    <p className='text-xl text-slate-700'>No Estates found !</p>
+                )}
+
+                {loading && (
+                    <p className='text-xl text-slate-700'>Loading...</p>
+                )}
+
+                {!loading && estates && estates.map((estate) => {
+                    return(
+                        <EstateItem key={estate._id} estate={estate}/>
+                    )
+                })}
+
+            </div>
+
         </div>
+
 
     </div>
   )

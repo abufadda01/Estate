@@ -131,7 +131,7 @@ const getEstates = async (req , res , next) => {
         .skip(startIndex)
 
 
-        res.status(200).json(estates)
+        res.status(200).json(estates) 
 
 
     } catch (error) {
